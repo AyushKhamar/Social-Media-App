@@ -11,6 +11,7 @@ import morgan from "morgan";
 import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/users.js";
 // configurations
 // Configure fileURLToPath
 const __filename = fileURLToPath(import.meta.url);
@@ -50,6 +51,8 @@ app.use(morgan("common"));
 app.post("/auth/register", upload.single("picture"), register);
 
 app.use("/auth", authRoutes);
+
+app.use("/users", userRoutes);
 
 //mongoose setup
 const port = process.env.PORT || 6001;
