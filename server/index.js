@@ -12,6 +12,13 @@ import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import { verifyToken } from "./middleware/auth.js";
+import postRoutes from "./routes/post.js";
+import { createPost } from "./controllers/posts.js";
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+import { users, posts } from "./data/index.js";
+
 // configurations
 // Configure fileURLToPath
 const __filename = fileURLToPath(import.meta.url);
@@ -49,10 +56,11 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 app.use("/auth", authRoutes);
-
 app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
 
 //mongoose setup
 const port = process.env.PORT || 6001;
@@ -63,6 +71,8 @@ mongoose
   })
   .then(() => {
     app.listen(port, () => {
+      // User.insertMany(users);
+      // Post.insertMany(posts);
       console.log(`listening on port ${port}`);
     });
   })
