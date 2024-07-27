@@ -9,7 +9,8 @@ import helmet from "helmet";
 import path from "path";
 import morgan from "morgan";
 import { fileURLToPath } from "url";
-import register from "./controllers/auth.js";
+import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js";
 // configurations
 // Configure fileURLToPath
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +48,8 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 
 app.post("/auth/register", upload.single("picture"), register);
+
+app.use("/auth", authRoutes);
 
 //mongoose setup
 const port = process.env.PORT || 6001;
